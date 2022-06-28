@@ -10,9 +10,18 @@ const usersData = [
   {id: '150', name: 'Georgina', age: 36, profession: "Teacher"},
 ]
 
+const hobbiesData = [
+  {id: '1', title: 'Programming', description: 'Using computers to make the world a better place'},
+  {id: '2', title: 'Rowing', description: 'Sweat and feel better before easing donouts'},
+  {id: '3', title: 'Swimming', description: 'Get in the water and learn to become the water'},
+  {id: '4', title: 'Fencing', description: 'A hobby for fency people'},
+  {id: '5', title: 'Hiking', description: 'Wear hiking boots and explore the world'},
+]
+
 const {
   GraphQLSchema,
   GraphQLObjectType, 
+  GraphQLID,
   GraphQLString,
   GraphQLInt
 } = graphql
@@ -22,12 +31,22 @@ const UserType = new GraphQLObjectType({
   name: 'User',
   description: 'Documentation for user...',
   fields: () => ({
-    id: {type: GraphQLString},
+    id: {type: GraphQLID},
     name: {type: GraphQLString},
     age: {type: GraphQLInt},
     profession: {type: GraphQLString}
   })
 });
+
+const HobbyType = new GraphQLObjectType({
+  name: 'Hobby',
+  description: 'Description for hobby',
+  fields: () => ({
+    id: {type: GraphQLID},
+    title: {type: GraphQLString},
+    description: {type: GraphQLString}
+  })
+})
 
 // Root query
 const RootQuery = new GraphQLObjectType({
@@ -36,11 +55,16 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     user: {
       type: UserType,
-      args: {id: {type: GraphQLString}},
+      args: {id: {type: GraphQLID}},
       resolve(parent, args) {
-        return _.find(usersData, {id: args.id})
-
-        // get and return data from a datasource
+        return _.find(usersData, {id: args.id});
+      }
+    },
+    hobby: {
+      type: HobbyType,
+      args: {id: {type: GraphQLID}},
+      resolve(parent, args) {
+        return _.find(hobbiesData, {id: args.id});
       }
     }
   }
