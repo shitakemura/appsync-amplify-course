@@ -3,11 +3,11 @@ const _ = require('lodash')
 
 // dummy data
 const usersData = [
-  {id: '1', name: 'Bond', age: 36},
-  {id: '13', name: 'Anna', age: 26},
-  {id: '211', name: 'Bella', age: 16},
-  {id: '19', name: 'Gina', age: 26},
-  {id: '150', name: 'Georgina', age: 36},
+  {id: '1', name: 'Bond', age: 36, profession: "Programmer"},
+  {id: '13', name: 'Anna', age: 26, profession: "Baker"},
+  {id: '211', name: 'Bella', age: 16, profession: "Mechanic"},
+  {id: '19', name: 'Gina', age: 26, profession: "Painter"},
+  {id: '150', name: 'Georgina', age: 36, profession: "Teacher"},
 ]
 
 const {
@@ -24,7 +24,8 @@ const UserType = new GraphQLObjectType({
   fields: () => ({
     id: {type: GraphQLString},
     name: {type: GraphQLString},
-    age: {type: GraphQLInt}
+    age: {type: GraphQLInt},
+    profession: {type: GraphQLString}
   })
 });
 
