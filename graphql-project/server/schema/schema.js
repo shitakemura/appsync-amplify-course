@@ -31,7 +31,8 @@ const {
   GraphQLObjectType, 
   GraphQLID,
   GraphQLString,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } = graphql
 
 // Create types
@@ -42,7 +43,13 @@ const UserType = new GraphQLObjectType({
     id: {type: GraphQLID},
     name: {type: GraphQLString},
     age: {type: GraphQLInt},
-    profession: {type: GraphQLString}
+    profession: {type: GraphQLString},
+    posts: {
+      type: new GraphQLList(PostType),
+      resolve(parent, args) {
+        return _.filter(postsData, {userId: parent.id});
+      }
+    }
   })
 });
 
