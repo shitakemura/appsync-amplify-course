@@ -267,6 +267,28 @@ const RootMutation = new GraphQLObjectType({
         return hobby.save();
       },
     },
+    updateHobby: {
+      type: HobbyType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        description: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return (updatedHobby = Hobby.findByIdAndUpdate(
+          args.id,
+          {
+            $set: {
+              title: args.title,
+              description: args.description,
+              userId: args.userId,
+            },
+          },
+          { new: true }
+        ));
+      },
+    },
   },
 });
 
