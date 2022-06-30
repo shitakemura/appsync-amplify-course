@@ -101,7 +101,7 @@ const HobbyType = new GraphQLObjectType({
       type: UserType,
       resolve(parent, args) {
         // return _.find(usersData, { id: parent.userId });
-        return User.find({ id: parent.userId });
+        return User.findById(parent.userId);
       },
     },
   }),
@@ -117,7 +117,7 @@ const PostType = new GraphQLObjectType({
       type: UserType,
       resolve(parent, args) {
         // return _.find(usersData, { id: parent.userId });
-        return User.find({ id: parent.userId });
+        return User.findById(parent.userId);
       },
     },
   }),
@@ -230,6 +230,25 @@ const RootMutation = new GraphQLObjectType({
           userId: args.userId,
         });
         return post.save();
+      },
+    },
+    updatePost: {
+      type: PostType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        comment: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return (updatePost = Post.findByIdAndUpdate(
+          args.id,
+          {
+            $set: {
+              comment: args.comment,
+            },
+          },
+          { new: true }
+        ));
       },
     },
     createHobby: {
