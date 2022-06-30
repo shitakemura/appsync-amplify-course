@@ -1,5 +1,8 @@
 const graphql = require('graphql');
 const _ = require('lodash');
+const User = require('../model/user');
+const Hobby = require('../model/hobby');
+const Post = require('../model/post');
 
 // dummy data
 const usersData = [
@@ -169,50 +172,47 @@ const RootMutation = new GraphQLObjectType({
     createUser: {
       type: UserType,
       args: {
-        // id: {type: GraphQLID}
         name: { type: GraphQLString },
         age: { type: GraphQLInt },
         profession: { type: GraphQLString },
       },
       resolve(parent, args) {
-        const user = {
+        const user = User({
           name: args.name,
           age: args.age,
           profession: args.profession,
-        };
-        return user;
+        });
+        return user.save();
       },
     },
     createPost: {
       type: PostType,
       args: {
-        // id: {type: GraphQLID},
         comment: { type: GraphQLString },
         userId: { type: GraphQLID },
       },
       resolve(parent, args) {
-        const post = {
+        const post = Post({
           comment: args.comment,
           userId: args.userId,
-        };
-        return post;
+        });
+        return post.save();
       },
     },
     createHobby: {
       type: HobbyType,
       args: {
-        // id: {type: GraphQLID},
         title: { type: GraphQLString },
         description: { type: GraphQLString },
         userId: { type: GraphQLID },
       },
       resolve(parent, args) {
-        const hobby = {
+        const hobby = Hobby({
           title: args.title,
           description: args.description,
           userId: args.userId,
-        };
-        return hobby;
+        });
+        return hobby.save();
       },
     },
   },
