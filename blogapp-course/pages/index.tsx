@@ -26,7 +26,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <h1 className="text-sky-400 text-3xl font-bold underline">MyPosts</h1>
+      <h1 className="text-3xl font-bold text-sky-400 underline">MyPosts</h1>
       {posts.map((post) => {
         return <p key={post.id}>{post.content}</p>
       })}
