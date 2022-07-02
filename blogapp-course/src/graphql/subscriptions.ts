@@ -14,7 +14,7 @@ export const onCreatePost = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const onUpdatePost = /* GraphQL */ `
   subscription OnUpdatePost {
     onUpdatePost {
@@ -27,7 +27,7 @@ export const onUpdatePost = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const onDeletePost = /* GraphQL */ `
   subscription OnDeletePost {
     onDeletePost {
@@ -40,4 +40,4 @@ export const onDeletePost = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`

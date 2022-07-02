@@ -17,7 +17,7 @@ export const createPost = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const updatePost = /* GraphQL */ `
   mutation UpdatePost(
     $input: UpdatePostInput!
@@ -33,7 +33,7 @@ export const updatePost = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const deletePost = /* GraphQL */ `
   mutation DeletePost(
     $input: DeletePostInput!
@@ -49,4 +49,4 @@ export const deletePost = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
