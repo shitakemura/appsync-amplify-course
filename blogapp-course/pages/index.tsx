@@ -15,8 +15,9 @@ const Home: NextPage = () => {
       })) as GraphQLResult<ListPostsQuery>
 
       const posts = [
-        ...((data?.listPosts?.items.filter((item) => item != null) as Post[]) ??
-          []),
+        ...((data?.listPosts?.items.filter(
+          (item) => item != null
+        ) as Post[]) ?? []),
       ]
       setPosts(posts)
     }
