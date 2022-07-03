@@ -19,11 +19,17 @@ const Post: NextPage<Props> = ({ post }) => {
     return <div>Loading...</div>
   }
 
+  if (!post) return null
+
   return (
     <div>
       <h1 className="mt-4 text-5xl font-semibold tracking-wide">
-        {post?.title}
+        {post.title}
       </h1>
+      <p className="my-4 text-sm font-light">By {post.username}</p>
+      <div className="mt-8">
+        <ReactMarkDown className="prose">{post.content ?? ''}</ReactMarkDown>
+      </div>
     </div>
   )
 }
@@ -65,6 +71,7 @@ export const getStaticProps = async (
     props: {
       post: data?.getPost,
     },
+    revalidate: 1,
   }
 }
 
