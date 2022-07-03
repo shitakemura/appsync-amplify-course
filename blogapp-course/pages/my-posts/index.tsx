@@ -11,10 +11,10 @@ const MyPosts: NextPage = () => {
 
   useEffect(() => {
     const fetchPostsByUsername = async () => {
-      const { username } = await Auth.currentAuthenticatedUser()
+      const { attributes, username } = await Auth.currentAuthenticatedUser()
       const { data } = (await API.graphql({
         query: postsByUsername,
-        variables: { username },
+        variables: { username: `${attributes.sub}::${username}` },
       })) as GraphQLResult<PostsByUsernameQuery>
 
       const posts = [
