@@ -16,7 +16,7 @@ import 'easymde/dist/easymde.min.css'
 const CreatePost = () => {
   const [post, setPost] = useState({ title: '', content: '' })
   const { title, content } = post
-  // const router = useRouter()
+  const router = useRouter()
 
   const createNewPost = async () => {
     if (!title || !content) return
@@ -28,7 +28,7 @@ const CreatePost = () => {
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     })) as GraphQLResult<CreatePostMutation>
 
-    // router.push(`/post/${id}`)
+    router.push(`/posts/${id}`)
   }
 
   return (
