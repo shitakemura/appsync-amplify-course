@@ -6,7 +6,16 @@
     "gqlSchemaPath": "/Users/shitakemura/appsync-amplify-course/blogapp-course/amplify/backend/api/blogappcourse/schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "expirationTime": 7
-    }
+      "expirationTime": 30,
+      "apiKeyExpirationDate": "2022-08-02T02:26:12.032Z",
+      "keyDescription": "public api key"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": [
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authblogappcourse5f23c5f6"
+      }
+    ]
   }
 }

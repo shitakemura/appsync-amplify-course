@@ -14,7 +14,7 @@ export const getPost = /* GraphQL */ `
       updatedAt
     }
   }
-`
+`;
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
@@ -34,7 +34,7 @@ export const listPosts = /* GraphQL */ `
       nextToken
     }
   }
-`
+`;
 export const postsByUsername = /* GraphQL */ `
   query PostsByUsername(
     $username: String!
@@ -62,4 +62,4 @@ export const postsByUsername = /* GraphQL */ `
       nextToken
     }
   }
-`
+`;
