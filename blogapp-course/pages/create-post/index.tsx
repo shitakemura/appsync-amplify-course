@@ -1,3 +1,5 @@
+import { withAuthenticator } from '@aws-amplify/ui-react'
+import '@aws-amplify/ui-react/styles.css'
 import { GraphQLResult } from '@aws-amplify/api-graphql'
 import { API } from 'aws-amplify'
 import { useRouter } from 'next/router'
@@ -5,18 +7,16 @@ import { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { CreatePostMutation } from '../../src/API'
 import { createPost } from '../../src/graphql/mutations'
-import SimpleMDE from 'react-simplemde-editor'
+import dynamic from 'next/dynamic'
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
+  ssr: false,
+})
 import 'easymde/dist/easymde.min.css'
 
-const initialState = { title: '', content: '' }
 const CreatePost = () => {
-  const [post, setPost] = useState(initialState)
+  const [post, setPost] = useState({ title: '', content: '' })
   const { title, content } = post
-  const router = useRouter()
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPost(() => ({ ...post, [event.target.name]: event.target.value }))
-  }
+  // const router = useRouter()
 
   const createNewPost = async () => {
     if (!title || !content) return
@@ -24,11 +24,11 @@ const CreatePost = () => {
 
     const _ = (await API.graphql({
       query: createPost,
-      variables: { input: post },
+      variables: { input: { ...post, id } },
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     })) as GraphQLResult<CreatePostMutation>
 
-    router.push(`/post/${id}`)
+    // router.push(`/post/${id}`)
   }
 
   return (
@@ -37,7 +37,9 @@ const CreatePost = () => {
         Create New Post
       </h1>
       <input
-        onChange={onChange}
+        onChange={(event) =>
+          setPost((prev) => ({ ...prev, title: event.target.value }))
+        }
         name="title"
         placeholder="Title"
         value={post.title}
@@ -45,10 +47,17 @@ const CreatePost = () => {
       />
       <SimpleMDE
         value={post.content}
-        onChange={(value) => setPost({ ...post, content: value })}
+        onChange={(value) => setPost((prev) => ({ ...prev, content: value }))}
       />
+      <button
+        type="button"
+        className="mb-4 rounded-lg bg-blue-600 px-8 py-2 font-semibold text-white"
+        onClick={createNewPost}
+      >
+        Create Post
+      </button>
     </div>
   )
 }
 
-export default CreatePost
+export default withAuthenticator(CreatePost)
