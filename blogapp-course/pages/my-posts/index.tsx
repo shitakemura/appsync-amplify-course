@@ -1,5 +1,5 @@
 import { GraphQLResult } from '@aws-amplify/api-graphql'
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { API, Auth } from 'aws-amplify'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -57,7 +57,7 @@ const MyPosts: NextPage = () => {
             <p className="mr-4 text-sm">
               <Link href={`/posts/${post.id}`}>View Post</Link>
             </p>
-            <p className='mr-4 text-sm text-blue-500'>
+            <p className="mr-4 text-sm text-blue-500">
               <Link href={`/edit-post/${post.id}`}>Edit Post</Link>
             </p>
             <button
