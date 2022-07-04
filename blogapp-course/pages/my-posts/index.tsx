@@ -57,6 +57,9 @@ const MyPosts: NextPage = () => {
             <p className="mr-4 text-sm">
               <Link href={`/posts/${post.id}`}>View Post</Link>
             </p>
+            <p className='mr-4 text-sm text-blue-500'>
+              <Link href={`/edit-post/${post.id}`}>Edit Post</Link>
+            </p>
             <button
               className="mr-4 text-sm text-red-500"
               onClick={() => deletePost(post.id)}

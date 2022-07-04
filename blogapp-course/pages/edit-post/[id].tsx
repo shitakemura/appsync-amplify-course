@@ -67,6 +67,7 @@ const EditPost = () => {
         onChange={onChange}
       />
       <SimpleMDE
+        value={post.content ?? ''}
         onChange={(value) =>
           setPost((prev) => ({ ...prev!, content: value }))
         }
