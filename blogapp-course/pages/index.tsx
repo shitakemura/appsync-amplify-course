@@ -30,6 +30,7 @@ const Home: NextPage = () => {
       ]
       setPosts(posts)
     }
+
     fetchPosts()
   }, [])
 
