@@ -12,12 +12,13 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 })
 import 'easymde/dist/easymde.min.css'
+import Image from 'next/image'
 
 const CreatePost = () => {
   const [post, setPost] = useState({ title: '', content: '' })
   const { title, content } = post
   const router = useRouter()
-  const [image, setImage] = useState<any>(null)
+  const [image, setImage] = useState<File | null>(null)
   const imageFileInput = useRef<HTMLInputElement>(null)
 
   const createNewPost = async () => {
@@ -69,22 +70,38 @@ const CreatePost = () => {
         value={post.title}
         className="y-2 my-4 w-full border-b pb-2 text-lg font-light text-gray-500 placeholder-gray-500 focus:outline-none"
       />
+      {image && (
+        <Image
+          width={300}
+          height={200}
+          src={URL.createObjectURL(image)}
+          alt="post-image"
+          className="my-4"
+        />
+      )}
       <SimpleMDE
         value={post.content}
         onChange={(value) => setPost((prev) => ({ ...prev, content: value }))}
       />
+      <input
+        type="file"
+        ref={imageFileInput}
+        className="absolute h-0 w-0"
+        onChange={handleChange}
+      />
+      <button
+        type="button"
+        className="mr-2 mb-4 rounded-lg bg-green-600 px-8 py-2 font-semibold text-white"
+        onClick={uploadImage}
+      >
+        Upload Cover Image
+      </button>
       <button
         type="button"
         className="mb-4 rounded-lg bg-blue-600 px-8 py-2 font-semibold text-white"
         onClick={createNewPost}
       >
         Create Post
-      </button>{' '}
-      <button
-        type="button"
-        className="mb-4 rounded-lg bg-purple-600 px-8 py-2 font-semibold text-white"
-      >
-        Upload Cover Image
       </button>
     </div>
   )
