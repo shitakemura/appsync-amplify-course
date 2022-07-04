@@ -18,3 +18,7 @@ type Post
     @index(name: "postsByUsername", queryField: "postsByUsername")
   coverImage: String
 }
+
+type Subscription {
+  newOnCreatePost: Post @aws_subscribe(mutations: ["createPost"])
+}

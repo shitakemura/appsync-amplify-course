@@ -1,13 +1,21 @@
 import type { NextPage } from 'next'
-import { API } from 'aws-amplify'
+import { API, graphqlOperation } from 'aws-amplify'
 import { listPosts } from '../src/graphql/queries'
 import { useEffect, useState } from 'react'
-import { Post, ListPostsQuery } from '../src/API'
+import { Post, ListPostsQuery, NewOnCreatePostSubscription } from '../src/API'
 import { GraphQLResult } from '@aws-amplify/api-graphql'
 import Link from 'next/link'
+import { newOnCreatePost } from '../src/graphql/subscriptions'
+
+type SubscriptionValue = {
+  value: {
+    data: NewOnCreatePostSubscription
+  }
+}
 
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Post[]>([])
+  const [newPost, setNewPost] = useState<Post | null>(null)
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -24,6 +32,24 @@ const Home: NextPage = () => {
     }
     fetchPosts()
   }, [])
+
+  useEffect(() => {
+    let subscription: any
+    const initSubscription = async () => {
+      subscription = (
+        API.graphql(graphqlOperation(newOnCreatePost)) as any
+      ).subscribe({
+        next: ({ value }: SubscriptionValue) =>
+          setNewPost(value.data.newOnCreatePost ?? null),
+      })
+    }
+    initSubscription()
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  console.log(`=== newPost: ${JSON.stringify(newPost)} ===`)
 
   return (
     <div>

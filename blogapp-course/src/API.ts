@@ -241,6 +241,19 @@ export type PostsByUsernameQuery = {
   } | null,
 };
 
+export type NewOnCreatePostSubscription = {
+  newOnCreatePost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content?: string | null,
+    username?: string | null,
+    coverImage?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreatePostSubscriptionVariables = {
   username?: string | null,
 };
