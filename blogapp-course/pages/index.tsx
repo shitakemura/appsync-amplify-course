@@ -1,11 +1,12 @@
 import type { NextPage } from 'next'
-import { API, graphqlOperation } from 'aws-amplify'
+import { API, graphqlOperation, Storage } from 'aws-amplify'
 import { listPosts } from '../src/graphql/queries'
 import { useEffect, useState } from 'react'
 import { Post, ListPostsQuery, NewOnCreatePostSubscription } from '../src/API'
 import { GraphQLResult } from '@aws-amplify/api-graphql'
 import Link from 'next/link'
 import { newOnCreatePost } from '../src/graphql/subscriptions'
+import Image from 'next/image'
 
 type SubscriptionValue = {
   value: {
@@ -28,7 +29,17 @@ const Home: NextPage = () => {
           (item) => item != null
         ) as Post[]) ?? []),
       ]
-      setPosts(posts)
+
+      const postsWithImages = await Promise.all(
+        posts.map(async (post) => {
+          if (post.coverImage) {
+            post.coverImage = await Storage.get(post.coverImage)
+          }
+          return post
+        })
+      )
+
+      setPosts(postsWithImages)
     }
 
     fetchPosts()
@@ -60,9 +71,20 @@ const Home: NextPage = () => {
       {posts.map((post) => {
         return (
           <Link key={post.id} href={`/posts/${post.id}`}>
-            <div className="mt-8 cursor-pointer border-b border-gray-300 pb-4">
-              <h2 className="text-xl font-semibold">{post.title}</h2>
-              <p className="mt-2 text-gray-500">Author: {post.username}</p>
+            <div className="my-6 border-b border-gray-300 pb-6">
+              {post.coverImage && (
+                <Image
+                  src={post.coverImage}
+                  width={36}
+                  height={36}
+                  className="h-36 w-36 rounded-full bg-contain bg-center sm:mx-0 sm:shrink-0"
+                  alt="post-image"
+                />
+              )}
+              <div className="mt-8 cursor-pointer border-b border-gray-300 pb-4">
+                <h2 className="text-xl font-semibold">{post.title}</h2>
+                <p className="mt-2 text-gray-500">Author: {post.username}</p>
+              </div>
             </div>
           </Link>
         )
