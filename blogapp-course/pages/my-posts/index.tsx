@@ -1,5 +1,5 @@
 import { GraphQLResult } from '@aws-amplify/api-graphql'
-import { API, Auth } from 'aws-amplify'
+import { API, Auth, Storage } from 'aws-amplify'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -7,6 +7,7 @@ import { DeletePostMutation, Post, PostsByUsernameQuery } from '../../src/API'
 import { postsByUsername } from '../../src/graphql/queries'
 import { deletePost as deletePostMutation } from '../../src/graphql/mutations'
 import Moment from 'moment'
+import Image from 'next/image'
 
 const MyPosts: NextPage = () => {
   const [posts, setPosts] = useState<Post[]>([])
@@ -23,7 +24,17 @@ const MyPosts: NextPage = () => {
         (item) => item != null
       ) as Post[]) ?? []),
     ]
-    setPosts(posts)
+
+    const postsWithImages = await Promise.all(
+      posts.map(async (post) => {
+        if (post.coverImage) {
+          post.coverImage = await Storage.get(post.coverImage)
+        }
+        return post
+      })
+    )
+
+    setPosts(postsWithImages)
   }
 
   useEffect(() => {
@@ -47,6 +58,15 @@ const MyPosts: NextPage = () => {
       {posts.map((post) => (
         <div key={post.id}>
           <div className="mt-8 cursor-pointer border-b border-gray-300 pb-4">
+            {post.coverImage && (
+              <Image
+                src={post.coverImage}
+                width={72}
+                height={72}
+                className="rounded-full bg-contain bg-center sm:mx-0 sm:shrink-0"
+                alt="post-image"
+              />
+            )}
             <h2 className="text-xl font-semibold">{post.title}</h2>
             <p className="mt-2 text-gray-500">Author: {post.username}</p>
             <p className="font-medium text-slate-500">
