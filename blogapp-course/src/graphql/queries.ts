@@ -25,7 +25,7 @@ export const getPost = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
@@ -40,6 +40,14 @@ export const listPosts = /* GraphQL */ `
         username
         coverImage
         comments {
+          items {
+            id
+            message
+            postID
+            createdAt
+            updatedAt
+            createdBy
+          }
           nextToken
         }
         createdAt
@@ -48,7 +56,7 @@ export const listPosts = /* GraphQL */ `
       nextToken
     }
   }
-`;
+`
 export const postsByUsername = /* GraphQL */ `
   query PostsByUsername(
     $username: String!
@@ -71,6 +79,14 @@ export const postsByUsername = /* GraphQL */ `
         username
         coverImage
         comments {
+          items {
+            id
+            message
+            postID
+            createdAt
+            updatedAt
+            createdBy
+          }
           nextToken
         }
         createdAt
@@ -79,7 +95,7 @@ export const postsByUsername = /* GraphQL */ `
       nextToken
     }
   }
-`;
+`
 export const getComment = /* GraphQL */ `
   query GetComment($id: ID!) {
     getComment(id: $id) {
@@ -103,7 +119,7 @@ export const getComment = /* GraphQL */ `
       createdBy
     }
   }
-`;
+`
 export const listComments = /* GraphQL */ `
   query ListComments(
     $filter: ModelCommentFilterInput
@@ -131,4 +147,4 @@ export const listComments = /* GraphQL */ `
       nextToken
     }
   }
-`;
+`

@@ -65,8 +65,8 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <h1 className="tracking-mode-wide mt-6 mb-2 text-3xl font-bold text-sky-400">
-        MyPosts
+      <h1 className="mt-6 mb-2 text-3xl font-semibold tracking-wide text-sky-400">
+        Posts
       </h1>
       {posts.map((post) => {
         return (
@@ -81,9 +81,28 @@ const Home: NextPage = () => {
                   alt="post-image"
                 />
               )}
-              <div className="mt-8 cursor-pointer border-b border-gray-300 pb-4">
+              <div className="mt-2 cursor-pointer">
                 <h2 className="text-xl font-semibold">{post.title}</h2>
                 <p className="mt-2 text-gray-500">Author: {post.username}</p>
+                {post.comments &&
+                  post.comments.items.length > 0 &&
+                  post.comments?.items.map((comment, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="max-auto my-6 mx-12 mb-2 max-w-xl space-y-2 bg-white py-8 px-8 shadow-lg sm:flex sm:items-center sm:space-y-0 sm:space-x-6 sm:py-1"
+                      >
+                        <div>
+                          <p className="mt-2 text-gray-500">
+                            {comment?.message}
+                          </p>
+                          <p className="mt-1 text-gray-500">
+                            {comment?.createdBy}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })}
               </div>
             </div>
           </Link>
