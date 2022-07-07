@@ -11,8 +11,10 @@ import { useEffect, useState } from 'react'
 import ReactMarkDown from 'react-markdown'
 import '../../configureAmplify'
 import {
+  CreateCommentMutation,
   CreateCommentMutationVariables,
   GetPostQuery,
+  GetPostQueryVariables,
   ListPostsQuery,
   Post,
 } from '../../src/API'
@@ -62,13 +64,13 @@ const Post: NextPage<Props> = ({ post }) => {
     const id = uuid()
 
     try {
-      await API.graphql({
+      ;(await API.graphql({
         query: createCommentMutation,
         variables: {
           input: { id, message: comment.message, postID: comment.postID },
         } as CreateCommentMutationVariables,
         authMode: 'AMAZON_COGNITO_USER_POOLS',
-      })
+      })) as GraphQLResult<CreateCommentMutation>
       router.push('/my-posts')
     } catch (error) {
       console.log(error)
@@ -156,7 +158,7 @@ export const getStaticProps = async (
   const id = context.params?.id
   const { data } = (await API.graphql({
     query: getPost,
-    variables: { id },
+    variables: { id } as GetPostQueryVariables,
   })) as GraphQLResult<GetPostQuery>
 
   return {

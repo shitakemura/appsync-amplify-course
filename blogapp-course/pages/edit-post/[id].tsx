@@ -4,9 +4,11 @@ import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import {
   GetPostQuery,
+  GetPostQueryVariables,
   Post,
   UpdatePostInput,
   UpdatePostMutation,
+  UpdatePostMutationVariables,
 } from '../../src/API'
 import { updatePost } from '../../src/graphql/mutations'
 import { getPost } from '../../src/graphql/queries'
@@ -32,7 +34,7 @@ const EditPost = () => {
       if (!id) return
       const { data } = (await API.graphql({
         query: getPost,
-        variables: { id },
+        variables: { id } as GetPostQueryVariables,
       })) as GraphQLResult<GetPostQuery>
 
       setPost(data?.getPost ?? null)
@@ -81,7 +83,7 @@ const EditPost = () => {
 
     const _ = (await API.graphql({
       query: updatePost,
-      variables: { input: postUpdated },
+      variables: { input: postUpdated } as UpdatePostMutationVariables,
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     })) as GraphQLResult<UpdatePostMutation>
 

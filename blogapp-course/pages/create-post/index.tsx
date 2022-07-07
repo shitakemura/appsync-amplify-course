@@ -5,7 +5,11 @@ import { API, Storage } from 'aws-amplify'
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { CreatePostInput, CreatePostMutation } from '../../src/API'
+import {
+  CreatePostInput,
+  CreatePostMutation,
+  CreatePostMutationVariables,
+} from '../../src/API'
 import { createPost } from '../../src/graphql/mutations'
 import dynamic from 'next/dynamic'
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
@@ -39,7 +43,7 @@ const CreatePost = () => {
 
     const _ = (await API.graphql({
       query: createPost,
-      variables: { input: postInput },
+      variables: { input: postInput } as CreatePostMutationVariables,
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     })) as GraphQLResult<CreatePostMutation>
 

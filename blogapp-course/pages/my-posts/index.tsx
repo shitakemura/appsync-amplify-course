@@ -3,7 +3,13 @@ import { API, Auth, Storage } from 'aws-amplify'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { DeletePostMutation, Post, PostsByUsernameQuery } from '../../src/API'
+import {
+  DeletePostMutation,
+  DeletePostMutationVariables,
+  Post,
+  PostsByUsernameQuery,
+  PostsByUsernameQueryVariables,
+} from '../../src/API'
 import { postsByUsername } from '../../src/graphql/queries'
 import { deletePost as deletePostMutation } from '../../src/graphql/mutations'
 import Moment from 'moment'
@@ -16,7 +22,9 @@ const MyPosts: NextPage = () => {
     const { attributes, username } = await Auth.currentAuthenticatedUser()
     const { data } = (await API.graphql({
       query: postsByUsername,
-      variables: { username: `${attributes.sub}::${username}` },
+      variables: {
+        username: `${attributes.sub}::${username}`,
+      } as PostsByUsernameQueryVariables,
     })) as GraphQLResult<PostsByUsernameQuery>
 
     const posts = [
@@ -44,7 +52,7 @@ const MyPosts: NextPage = () => {
   const deletePost = async (id: string) => {
     const _ = (await API.graphql({
       query: deletePostMutation,
-      variables: { input: { id } },
+      variables: { input: { id } } as DeletePostMutationVariables,
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     })) as GraphQLResult<DeletePostMutation>
     fetchPostsByUsername()
