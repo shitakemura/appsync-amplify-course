@@ -10,21 +10,31 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ReactMarkDown from 'react-markdown'
 import '../../configureAmplify'
-import { GetPostQuery, ListPostsQuery, Post } from '../../src/API'
+import {
+  CreateCommentMutationVariables,
+  GetPostQuery,
+  ListPostsQuery,
+  Post,
+} from '../../src/API'
 import { getPost, listPosts } from '../../src/graphql/queries'
 import dynamic from 'next/dynamic'
 import { Auth, Hub } from 'aws-amplify'
+import { v4 as uuid } from 'uuid'
 
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 })
 import 'easymde/dist/easymde.min.css'
+import { createComment as createCommentMutation } from '../../src/graphql/mutations'
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Post: NextPage<Props> = ({ post }) => {
   const [coverImage, setCoverImage] = useState<string | null>(null)
-  const [comment, setComment] = useState({ message: '' })
+  const [comment, setComment] = useState<{
+    message: string
+    postID: string | null
+  }>({ message: '', postID: null })
   const [showMe, setShowMe] = useState(false)
 
   const toggle = () => {
@@ -45,6 +55,24 @@ const Post: NextPage<Props> = ({ post }) => {
   const router = useRouter()
   if (router.isFallback) {
     return <div>Loading...</div>
+  }
+
+  const createComment = async () => {
+    if (!comment.message) return
+    const id = uuid()
+
+    try {
+      await API.graphql({
+        query: createCommentMutation,
+        variables: {
+          input: { id, message: comment.message, postID: comment.postID },
+        } as CreateCommentMutationVariables,
+        authMode: 'AMAZON_COGNITO_USER_POOLS',
+      })
+      router.push('/my-posts')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   if (!post) return null
@@ -78,10 +106,16 @@ const Post: NextPage<Props> = ({ post }) => {
         </button>
         {
           <div style={{ display: showMe ? 'block' : 'none' }}>
-            <SimpleMDE value="hello" />
+            <SimpleMDE
+              value={comment.message}
+              onChange={(value) =>
+                setComment({ message: value, postID: post.id })
+              }
+            />
             <button
               type="button"
               className="mb-4 rounded-lg bg-green-600 px-8 py-2 font-semibold text-white"
+              onClick={createComment}
             >
               Save
             </button>
